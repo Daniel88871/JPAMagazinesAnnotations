@@ -1,17 +1,12 @@
 package controller;
 
-import model.Author;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+import model.Hechizos;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
 import java.util.*;
-
-import org.hibernate.SessionFactory;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -30,11 +25,11 @@ public class AuthorController {
     this.entityManagerFactory = entityManagerFactory;
   }
 
-  public List<Author> readAuthorsFile(String filename) throws IOException {
+  public List<Hechizos> readAuthorsFile(String filename) throws IOException {
     int id;
     String name, year, country;
     boolean active;
-    List<Author> authorsList = new ArrayList<Author>();
+    List<Hechizos> authorsList = new ArrayList<Hechizos>();
 
     BufferedReader br = new BufferedReader(new FileReader(filename));
     String linea = "";
@@ -46,7 +41,7 @@ public class AuthorController {
       country = str.nextToken();
       active = Boolean.parseBoolean(str.nextToken());
       // System.out.println(id + name + country + year + active);
-      authorsList.add(new Author(id, name, country, year, active));
+      authorsList.add(new Hechizos(id, name, country, year, active));
 
     }
     br.close();
@@ -54,7 +49,7 @@ public class AuthorController {
     return authorsList;
   }
 
-  public void printAutors(ArrayList<Author> authorsList) {
+  public void printAutors(ArrayList<Hechizos> authorsList) {
     for (int i = 0; i < authorsList.size(); i++) {
       System.out.println(authorsList.get(i).toString());
     }
@@ -62,13 +57,13 @@ public class AuthorController {
 
 
   /* Method to CREATE an Autor in the database */
-  public void addAuthor(Author author) {
+  public void addAuthor(Hechizos hechizos) {
     EntityManager em = entityManagerFactory.createEntityManager();
     em.getTransaction().begin();
-    Author authotExists = (Author) em.find(Author.class, author.getAuthorId());
+    Hechizos authotExists = (Hechizos) em.find(Hechizos.class, hechizos.getHechizoId());
     if (authotExists == null ){
       System.out.println("insert autor");
-      em.persist(author);
+      em.persist(hechizos);
     }
     em.getTransaction().commit();
     em.close();
@@ -79,10 +74,10 @@ public class AuthorController {
   public void listAuthors() {
     EntityManager em = entityManagerFactory.createEntityManager();
     em.getTransaction().begin();
-    List<Author> result = em.createQuery("from Author", Author.class)
+    List<Hechizos> result = em.createQuery("from Author", Hechizos.class)
         .getResultList();
-    for (Author author : result) {
-      System.out.println(author.toString());
+    for (Hechizos hechizos : result) {
+      System.out.println(hechizos.toString());
     }
     em.getTransaction().commit();
     em.close();
@@ -92,9 +87,9 @@ public class AuthorController {
   public void updateAutor(Integer authorId, boolean active) {
     EntityManager em = entityManagerFactory.createEntityManager();
     em.getTransaction().begin();
-    Author author = (Author) em.find(Author.class, authorId);
-    author.setActive(active);
-    em.merge(author);
+    Hechizos hechizos = (Hechizos) em.find(Hechizos.class, authorId);
+    hechizos.setActive(active);
+    em.merge(hechizos);
     em.getTransaction().commit();
     em.close();
   }
@@ -103,8 +98,8 @@ public class AuthorController {
   public void deleteAuthor(Integer authorId) {
     EntityManager em = entityManagerFactory.createEntityManager();
     em.getTransaction().begin();
-    Author author = (Author) em.find(Author.class, authorId);
-    em.remove(author);
+    Hechizos hechizos = (Hechizos) em.find(Hechizos.class, authorId);
+    em.remove(hechizos);
     em.getTransaction().commit();
     em.close();
   }

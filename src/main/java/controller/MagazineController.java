@@ -1,11 +1,6 @@
 package controller;
 
-import model.Article;
-import model.Magazine;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
+import model.Objetos;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -43,12 +38,12 @@ public class MagazineController {
    *                     llistaRevistes<>nil
    */
 
-  public List<Magazine> readMagazinesFile(String filename) throws IOException {
+  public List<Objetos> readMagazinesFile(String filename) throws IOException {
     int magazineId;
     String title;
     Date publicationDate;
     DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
-    List<Magazine> magazinesList = new ArrayList();
+    List<Objetos> magazinesList = new ArrayList();
 
     BufferedReader br = new BufferedReader(new FileReader(filename));
     String linea = "";
@@ -59,7 +54,7 @@ public class MagazineController {
 
       try {
         publicationDate = dateFormat.parse(str.nextToken());
-        magazinesList.add(new Magazine(magazineId, title, publicationDate));
+        magazinesList.add(new Objetos(magazineId, title, publicationDate));
 
       } catch (ParseException e) {
         System.err.println("Errada format data al fitxer");
@@ -71,17 +66,17 @@ public class MagazineController {
     return magazinesList;
   }
 
-  public void printMagazines(ArrayList<Magazine> magazinesList) {
+  public void printMagazines(ArrayList<Objetos> magazinesList) {
     for (int i = 0; i < magazinesList.size(); i++) {
       System.out.println(magazinesList.get(i).toString());
     }
   }
 
   /* Method to CREATE a Magazine  in the database */
-  public void addMagazine(Magazine magazine) {
+  public void addMagazine(Objetos objetos) {
     EntityManager em = entityManagerFactory.createEntityManager();
     em.getTransaction().begin();
-    em.merge(magazine);
+    em.merge(objetos);
 
     em.getTransaction().commit();
     em.close();
@@ -91,13 +86,13 @@ public class MagazineController {
   public void listMagazines() {
     EntityManager em = entityManagerFactory.createEntityManager();
     em.getTransaction().begin();
-    List<Magazine> result = em.createQuery("from Magazine", Magazine.class)
+    List<Objetos> result = em.createQuery("from Magazine", Objetos.class)
         .getResultList();
 
 
 
-    for (Magazine magazine : result) {
-      System.out.println(magazine.toString());
+    for (Objetos objetos : result) {
+      System.out.println(objetos.toString());
     }
     em.getTransaction().commit();
     em.close();
@@ -107,8 +102,8 @@ public class MagazineController {
   public void updateMagazine(Integer magazineId) {
     EntityManager em = entityManagerFactory.createEntityManager();
     em.getTransaction().begin();
-    Magazine magazine = (Magazine) em.find(Magazine.class, magazineId);
-    em.merge(magazine);
+    Objetos objetos = (Objetos) em.find(Objetos.class, magazineId);
+    em.merge(objetos);
     em.getTransaction().commit();
     em.close();
   }
@@ -117,8 +112,8 @@ public class MagazineController {
   public void deleteAutor(Integer magazineId) {
     EntityManager em = entityManagerFactory.createEntityManager();
     em.getTransaction().begin();
-    Magazine magazine = (Magazine) em.find(Magazine.class, magazineId);
-    em.remove(magazine);
+    Objetos objetos = (Objetos) em.find(Objetos.class, magazineId);
+    em.remove(objetos);
     em.getTransaction().commit();
     em.close();
   }

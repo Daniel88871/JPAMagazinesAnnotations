@@ -1,12 +1,8 @@
 package controller;
 
-import model.Article;
-import model.Author;
-import model.Magazine;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
+import model.Campeones;
+import model.Hechizos;
+import model.Objetos;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -53,7 +49,7 @@ public class ArticleController {
    *                     llistaRevistes
    *                     .getRevista(i).getArticle(j).getAutor()<>nil</br>
    */
-  public List<Magazine> readArticlesFile(String articlesFile, String magazinesFile, String authorsFile)
+  public List<Objetos> readArticlesFile(String articlesFile, String magazinesFile, String authorsFile)
       throws IOException {
     int articleId, magazineId, authorId;
     String title;
@@ -64,8 +60,8 @@ public class ArticleController {
     BufferedReader br = new BufferedReader(new FileReader(articlesFile));
     String linea = "";
 
-    List<Magazine> magazinesList = magazineController.readMagazinesFile(magazinesFile);
-    List<Author> authorList = authorController.readAuthorsFile(authorsFile);
+    List<Objetos> magazinesList = magazineController.readMagazinesFile(magazinesFile);
+    List<Hechizos> hechizosList = authorController.readAuthorsFile(authorsFile);
 
     while ((linea = br.readLine()) != null) {
       StringTokenizer str = new StringTokenizer(linea, ",");
@@ -78,7 +74,7 @@ public class ArticleController {
         creationDate = dateFormat.parse(str.nextToken());
         publishable = Boolean.parseBoolean(str.nextToken());
 
-        magazinesList.get(magazineId - 1).addArticle(new Article(articleId, title, creationDate, publishable, authorList.get(authorId - 1)));
+        magazinesList.get(magazineId - 1).addArticle(new Campeones(articleId, title, creationDate, publishable, hechizosList.get(authorId - 1)));
 
       } catch (ParseException e) {
 
@@ -91,7 +87,7 @@ public class ArticleController {
     return magazinesList;
   }
 
-  public List<Article>  readArticlesFile(String articlesFile, String authorsFile) throws IOException {
+  public List<Campeones>  readArticlesFile(String articlesFile, String authorsFile) throws IOException {
     int articleId, magazineId, authorId;
     String title;
     Date creationDate;
@@ -100,8 +96,8 @@ public class ArticleController {
 
     BufferedReader br = new BufferedReader(new FileReader(articlesFile));
     String linea = "";
-    List<Author> authorList = authorController.readAuthorsFile(authorsFile);
-    List<Article> articlesList = new ArrayList<Article>();
+    List<Hechizos> hechizosList = authorController.readAuthorsFile(authorsFile);
+    List<Campeones> articlesList = new ArrayList<Campeones>();
 
     while ((linea = br.readLine()) != null) {
       StringTokenizer str = new StringTokenizer(linea, ",");
@@ -114,7 +110,7 @@ public class ArticleController {
         creationDate = dateFormat.parse(str.nextToken());
         publishable = Boolean.parseBoolean(str.nextToken());
 
-        articlesList.add(new Article(articleId, title, creationDate, publishable, authorList.get(authorId - 1)));
+        articlesList.add(new Campeones(articleId, title, creationDate, publishable, hechizosList.get(authorId - 1)));
 
       } catch (ParseException e) {
 
@@ -128,10 +124,10 @@ public class ArticleController {
   }
 
   /* Method to CREATE an Article in the database */
-  public void addArticle(Article article) {
+  public void addArticle(Campeones campeones) {
     EntityManager em = entityManagerFactory.createEntityManager();
     em.getTransaction().begin();
-    em.merge(article);
+    em.merge(campeones);
     em.getTransaction().commit();
     em.close();
   }
@@ -140,10 +136,10 @@ public class ArticleController {
   public void listArticles() {
     EntityManager em = entityManagerFactory.createEntityManager();
     em.getTransaction().begin();
-    List<Article> result = em.createQuery("from Article", Article.class)
+    List<Campeones> result = em.createQuery("from Article", Campeones.class)
         .getResultList();
-    for (Article article : result) {
-      System.out.println(article.toString());
+    for (Campeones campeones : result) {
+      System.out.println(campeones.toString());
     }
     em.getTransaction().commit();
     em.close();
@@ -153,8 +149,8 @@ public class ArticleController {
   public void updateArticle(Integer articleId) {
     EntityManager em = entityManagerFactory.createEntityManager();
     em.getTransaction().begin();
-    Article article = (Article) em.find(Article.class, articleId);
-    em.merge(article);
+    Campeones campeones = (Campeones) em.find(Campeones.class, articleId);
+    em.merge(campeones);
     em.getTransaction().commit();
     em.close();
   }
@@ -163,8 +159,8 @@ public class ArticleController {
   public void deleteArticle(Integer articleId) {
     EntityManager em = entityManagerFactory.createEntityManager();
     em.getTransaction().begin();
-    Article article = (Article) em.find(Article.class, articleId);
-    em.remove(article);
+    Campeones campeones = (Campeones) em.find(Campeones.class, articleId);
+    em.remove(campeones);
     em.getTransaction().commit();
     em.close();
   }

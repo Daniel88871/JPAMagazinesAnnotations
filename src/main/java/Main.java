@@ -14,8 +14,6 @@ import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.service.ServiceRegistry;
 import view.Menu;
 
 import javax.persistence.EntityManagerFactory;
@@ -64,7 +62,7 @@ public class Main {
   }
 
   public static void main(String[] args) {
-    ArrayList<Magazine> revistes = new ArrayList();
+    ArrayList<Objetos> revistes = new ArrayList();
 
     ConnectionFactory connectionFactory = ConnectionFactory.getInstance();
     Connection c = connectionFactory.connect();
@@ -99,30 +97,30 @@ public class Main {
           // magazineController.printMagazines(magazineController.readMagazinesFile("src/main/resources/revistes.txt"));
           // magazineController.printMagazines();
 
-          List<Author> authors = authorController.readAuthorsFile("src/main/resources/autors.txt");
-          List<Magazine> magazines = articleController.readArticlesFile("src/main/resources/articles.txt", "src/main/resources/revistes.txt", "src/main/resources/autors.txt");
-          List<Article> articles = articleController.readArticlesFile("src/main/resources/articles.txt", "src/main/resources/autors.txt");
+          List<Hechizos> hechizos = authorController.readAuthorsFile("src/main/resources/autors.txt");
+          List<Objetos> objetos = articleController.readArticlesFile("src/main/resources/articles.txt", "src/main/resources/revistes.txt", "src/main/resources/autors.txt");
+          List<Campeones> campeones = articleController.readArticlesFile("src/main/resources/articles.txt", "src/main/resources/autors.txt");
 
           System.out.println("Revistes llegides des del fitxer");
-          for (int i = 0; i < magazines.size(); i++) {
-            System.out.println(magazines.get(i).toString()+"\n");
-            for (int j = 0; j < magazines.get(i).getArticles().size(); j++) {
-              Author author = magazines.get(i).getArticles().get(j).getAuthor();
-              authorController.addAuthor(author);
+          for (int i = 0; i < objetos.size(); i++) {
+            System.out.println(objetos.get(i).toString()+"\n");
+            for (int j = 0; j < objetos.get(i).getArticles().size(); j++) {
+              Hechizos hechizos = objetos.get(i).getArticles().get(j).getAuthor();
+              authorController.addAuthor(hechizos);
 
               System.out.println("EL AUTOR:");
-              System.out.println(author);
+              System.out.println(hechizos);
 
-              Article article = magazines.get(i).getArticles().get(j);
-              article.setAuthor(author);
+              Campeones campeones = objetos.get(i).getArticles().get(j);
+              campeones.setCampeonId(campeones);
 
               System.out.println("EL ARTICLE:");
-              System.out.println(article);
+              System.out.println(campeones);
 
-              articleController.addArticle(article);
+              articleController.addArticle(campeones);
             }
 
-            magazineController.addMagazine(magazines.get(i));
+            magazineController.addMagazine(objetos.get(i));
           }
 
 /*
