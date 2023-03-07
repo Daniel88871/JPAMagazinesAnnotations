@@ -3,8 +3,8 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
-import controller.ArticleController;
-import controller.AuthorController;
+import controller.HechizosController;
+import controller.CampeonController;
 import controller.MagazineController;
 import database.ConnectionFactory;
 import model.*;
@@ -72,8 +72,8 @@ public class Main {
     //sessionObj = buildSessionFactory().openSession();
 
 
-    AuthorController authorController = new AuthorController(c, entityManagerFactory);
-    ArticleController articleController = new ArticleController(c, entityManagerFactory);
+    CampeonController campeonController = new CampeonController(c, entityManagerFactory);
+    HechizosController hechizosController = new HechizosController(c, entityManagerFactory);
     MagazineController magazineController = new MagazineController(c, entityManagerFactory);
 
     Menu menu = new Menu();
@@ -97,16 +97,16 @@ public class Main {
           // magazineController.printMagazines(magazineController.readMagazinesFile("src/main/resources/revistes.txt"));
           // magazineController.printMagazines();
 
-          List<Hechizos> hechizos = authorController.readAuthorsFile("src/main/resources/autors.txt");
-          List<Objetos> objetos = articleController.readArticlesFile("src/main/resources/articles.txt", "src/main/resources/revistes.txt", "src/main/resources/autors.txt");
-          List<Campeones> campeones = articleController.readArticlesFile("src/main/resources/articles.txt", "src/main/resources/autors.txt");
+          List<Hechizos> hechizos = campeonController.readAuthorsFile("src/main/resources/autors.txt");
+          List<Objetos> objetos = hechizosController.readArticlesFile("src/main/resources/articles.txt", "src/main/resources/revistes.txt", "src/main/resources/autors.txt");
+          List<Campeones> campeones = hechizosController.readArticlesFile("src/main/resources/articles.txt", "src/main/resources/autors.txt");
 
           System.out.println("Revistes llegides des del fitxer");
           for (int i = 0; i < objetos.size(); i++) {
             System.out.println(objetos.get(i).toString()+"\n");
             for (int j = 0; j < objetos.get(i).getArticles().size(); j++) {
               Hechizos hechizos = objetos.get(i).getArticles().get(j).getAuthor();
-              authorController.addAuthor(hechizos);
+              campeonController.addAuthor(hechizos);
 
               System.out.println("EL AUTOR:");
               System.out.println(hechizos);
@@ -117,7 +117,7 @@ public class Main {
               System.out.println("EL ARTICLE:");
               System.out.println(campeones);
 
-              articleController.addArticle(campeones);
+              hechizosController.addArticle(campeones);
             }
 
             magazineController.addMagazine(objetos.get(i));

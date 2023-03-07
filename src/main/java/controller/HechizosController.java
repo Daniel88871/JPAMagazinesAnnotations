@@ -15,19 +15,19 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-public class ArticleController {
+public class HechizosController {
 
   private Connection connection;
   private EntityManagerFactory entityManagerFactory;
 
   private MagazineController magazineController = new MagazineController(connection);
-  private AuthorController authorController = new AuthorController(connection);
+  private CampeonController campeonController = new CampeonController(connection);
 
-  public ArticleController(Connection connection) {
+  public HechizosController(Connection connection) {
     this.connection = connection;
   }
 
-  public ArticleController(Connection connection, EntityManagerFactory entityManagerFactory) {
+  public HechizosController(Connection connection, EntityManagerFactory entityManagerFactory) {
     this.connection = connection;
     this.entityManagerFactory = entityManagerFactory;
   }
@@ -49,7 +49,7 @@ public class ArticleController {
    *                     llistaRevistes
    *                     .getRevista(i).getArticle(j).getAutor()<>nil</br>
    */
-  public List<Objetos> readArticlesFile(String articlesFile, String magazinesFile, String authorsFile)
+  public List<Hechizos> readHechizosFile(String hechizosFile, String magazinesFile, String authorsFile)
       throws IOException {
     int articleId, magazineId, authorId;
     String title;
@@ -61,7 +61,7 @@ public class ArticleController {
     String linea = "";
 
     List<Objetos> magazinesList = magazineController.readMagazinesFile(magazinesFile);
-    List<Hechizos> hechizosList = authorController.readAuthorsFile(authorsFile);
+    List<Hechizos> hechizosList = campeonController.readAuthorsFile(authorsFile);
 
     while ((linea = br.readLine()) != null) {
       StringTokenizer str = new StringTokenizer(linea, ",");
@@ -96,7 +96,7 @@ public class ArticleController {
 
     BufferedReader br = new BufferedReader(new FileReader(articlesFile));
     String linea = "";
-    List<Hechizos> hechizosList = authorController.readAuthorsFile(authorsFile);
+    List<Hechizos> hechizosList = campeonController.readAuthorsFile(authorsFile);
     List<Campeones> articlesList = new ArrayList<Campeones>();
 
     while ((linea = br.readLine()) != null) {
